@@ -33,7 +33,7 @@ func main() {
 		log.Fatal(err)
 	}
 	if flgVersion {
-		fmt.Println("dailyrepo v0.0.1")
+		fmt.Println("dailyrepo v0.0.2")
 	}
 
 	// Handle sub commands
