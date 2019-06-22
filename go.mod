@@ -1,4 +1,4 @@
-module go-cli-tutorial
+module github.com/pddg/go-cli-tutorial
 
 go 1.12
 
