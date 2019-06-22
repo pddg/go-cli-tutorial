@@ -9,6 +9,8 @@ import (
 
 const version = "v0.0.3"
 
+var flgVerbose bool
+
 var rootCmd = &cobra.Command{
 	Use:   "dailyrepo",
 	Short: "日報作成ツール",
@@ -30,8 +32,13 @@ func Execute() {
 }
 
 func init() {
+	cobra.OnInitialize(func() {
+		if flgVerbose {
+			fmt.Println("Verbose output is enabled")
+		}
+	})
 	rootCmd.Flags().BoolP("version", "v", false, "Print version")
-	rootCmd.Flags().Bool("verbose", false, "Print log")
+	rootCmd.PersistentFlags().BoolVar(&flgVerbose, "verbose", false, "Print log")
 }
 
 func printVersion() {
