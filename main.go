@@ -8,6 +8,9 @@ import (
 	"os"
 	"text/template"
 	"time"
+
+	_ "github.com/pddg/go-cli-tutorial/statik"
+	"github.com/rakyll/statik/fs"
 )
 
 var flgVersion bool
@@ -30,7 +33,7 @@ func main() {
 		log.Fatal(err)
 	}
 	if flgVersion {
-		fmt.Println("dailyrepo v0.0.1")
+		fmt.Println("dailyrepo v0.0.2")
 	}
 
 	// Handle sub commands
@@ -52,11 +55,10 @@ func main() {
 }
 
 func handleAddCmd(fileName string) error {
-	filePath := fmt.Sprintf("./templates/report.md.tmpl")
-	byteTmpl, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		return err
-	}
+	statikFs, _ := fs.New()
+	// template読み込む
+	tplFile, _ := statikFs.Open("/report.md.tmpl")
+	byteTmpl, _ := ioutil.ReadAll(tplFile)
 	stringTmpl := string(byteTmpl)
 	tmpl := template.Must(template.New("report").Parse(stringTmpl))
 	// Todayを差し込む
