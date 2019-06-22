@@ -11,6 +11,9 @@ var rootCmd = &cobra.Command{
 	Use:   "dailyrepo",
 	Short: "日報作成ツール",
 	Long:  "テンプレートから日報の雛形を作成します",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return nil
+	},
 }
 
 func Execute() {
@@ -21,4 +24,5 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.Flags().BoolP("version", "v", false, "Print version")
 }
