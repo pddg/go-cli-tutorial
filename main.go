@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"text/template"
 	"time"
 )
 
@@ -51,11 +52,21 @@ func main() {
 }
 
 func handleAddCmd(fileName string) error {
-	filePath := fmt.Sprintf("./templates/%s", fileName)
+	filePath := fmt.Sprintf("./templates/report.md.tmpl")
 	byteTmpl, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return err
 	}
-	fmt.Println(string(byteTmpl))
+	stringTmpl := string(byteTmpl)
+	tmpl := template.Must(template.New("report").Parse(stringTmpl))
+	// Todayを差し込む
+	reportFile, _ := os.Create(fileName)
+	reportMeta := struct {
+		Today string
+	}{
+		Today: time.Now().Format("2006-01-02"),
+	}
+	// text/templateとhtml/templateで挙動が違うので注意
+	_ = tmpl.Execute(reportFile, reportMeta)
 	return nil
 }
