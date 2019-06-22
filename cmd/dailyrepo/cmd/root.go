@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -18,7 +19,7 @@ var rootCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		v, _ := cmd.Flags().GetBool("version")
 		if v {
-			printVersion()
+			printVersion(os.Stdout)
 		}
 		return nil
 	},
@@ -41,6 +42,6 @@ func init() {
 	rootCmd.PersistentFlags().BoolVar(&flgVerbose, "verbose", false, "Print log")
 }
 
-func printVersion() {
-	fmt.Printf("dailyrepo %s\n", version)
+func printVersion(out io.Writer) {
+	_, _ = fmt.Fprintf(out, "dailyrepo %s\n", version)
 }
