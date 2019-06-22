@@ -1,8 +1,8 @@
 package cmd
 
 import (
+	"github.com/spf13/afero"
 	"io/ioutil"
-	"os"
 	"text/template"
 	"time"
 
@@ -17,7 +17,7 @@ var addCmd = &cobra.Command{
 	Long:  "テンプレートを元に今日の日報の雛形を作成する",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fileName, _ := cmd.Flags().GetString("name")
-		_ = generateReport(fileName)
+		_ = generateReport(fileName, afero.NewOsFs())
 		return nil
 	},
 }
@@ -28,7 +28,7 @@ func init() {
 	addCmd.Flags().StringP("name", "n", time.Now().Format("2006-01-02")+".md", "filename")
 }
 
-func generateReport(fileName string) error {
+func generateReport(fileName string, afs afero.Fs) error {
 	statikFs, _ := fs.New()
 	// template読み込む
 	tplFile, _ := statikFs.Open("/report.md.tmpl")
@@ -36,7 +36,10 @@ func generateReport(fileName string) error {
 	stringTmpl := string(byteTmpl)
 	tmpl := template.Must(template.New("report").Parse(stringTmpl))
 	// Todayを差し込む
-	reportFile, _ := os.Create(fileName)
+	// reportFile, _ := os.Create(fileName)
+	// afero.Fsは全ての操作を実装していない．そのためAferoに操作を移譲する
+	af := afero.Afero{Fs: afs}
+	reportFile, _ := af.Create(fileName)
 	reportMeta := struct {
 		Today string
 	}{
