@@ -48,6 +48,8 @@ func main() {
 			fmt.Printf("Unknown command: %v\n", args[1:])
 			os.Exit(2)
 		}
+	} else {
+		rootCmd.Usage()
 	}
 	if err != nil {
 		fmt.Println(err)
