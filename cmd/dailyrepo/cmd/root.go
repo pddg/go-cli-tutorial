@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const version = "v0.0.3"
+const version = "v0.0.4"
 
 var flgVerbose bool
 
