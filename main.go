@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"time"
@@ -32,15 +33,29 @@ func main() {
 	}
 
 	// Handle sub commands
+	var err error
 	args := rootCmd.Args()
 	if len(args) > 0 {
 		switch args[0] {
 		case "add":
 			_ = addCmd.Parse(args[1:])
-			fmt.Println(fileName)
+			err = handleAddCmd(fileName)
 		default:
 			fmt.Printf("Unknown command: %v\n", args[1:])
 			os.Exit(2)
 		}
 	}
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func handleAddCmd(fileName string) error {
+	filePath := fmt.Sprintf("./templates/%s", fileName)
+	byteTmpl, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(byteTmpl))
+	return nil
 }
