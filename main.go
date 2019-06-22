@@ -22,5 +22,7 @@ func main() {
 		}
 		log.Fatal(err)
 	}
-	fmt.Println(flgVersion)
+	if flgVersion {
+		fmt.Println("dailyrepo v0.0.1")
+	}
 }
